@@ -1,5 +1,6 @@
 # Import the pygame module
 import pygame
+from pygame.constants import K_d
 
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
@@ -27,23 +28,14 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect()
 
 # Move the sprite based on user keypresses
-
 def update(self, pressed_keys):
-
     if pressed_keys[K_UP]:
-
         self.rect.move_ip(0, -5)
-
     if pressed_keys[K_DOWN]:
-
         self.rect.move_ip(0, 5)
-
     if pressed_keys[K_LEFT]:
-
         self.rect.move_ip(-5, 0)
-
     if pressed_keys[K_RIGHT]:
-
         self.rect.move_ip(5, 0)
 
 # Initialize pygame
@@ -71,15 +63,9 @@ while running:
         # Check for QUIT event. If QUIT, then set running to false.
         elif event.type == QUIT:
             running = False
-
-   # Draw the player on the screen
-    screen.blit(player.surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-
-    # Update the display
-    pygame.display.flip()
-
     # Get all the keys currently pressed
-    pressed_keys = pygame.key.get_pressed()
+    #pressed_keys = pygame.key.get_pressed()
+    pressed_keys = [K_DOWN]
 
     # Update the player sprite based on user keypresses
     player.update(pressed_keys)
@@ -87,4 +73,8 @@ while running:
     # Fill the screen with black
     screen.fill((0, 0, 0))
 
- 
+    # Draw the player on the screen
+    screen.blit(player.surf, player.rect)
+
+    # Update the display
+    pygame.display.flip()
