@@ -56,9 +56,7 @@ running = True
 while running:
     # for loop through the event queue
     for event in pygame.event.get():
-        # Check for KEYDOWN event
-        #if event.key == K_ESCAPE:
-                #running = False
+
         if event.type == QUIT:
             running = False
         # Check for QUIT event. If QUIT, then set running to false.
@@ -71,17 +69,9 @@ while running:
     screen.blit(player.surf, player.rect)
 
     pressed_keys = pygame.key.get_pressed()
-    #if pressed_keys[pygame.K_LEFT]: #LEFT ARROW
-        #print("sugma") 
+    if pressed_keys[pygame.K_ESCAPE]: #LEFT ARROW
+        running = False 
     updated(player, pressed_keys)
-    
-    
-        #pressed_keys = pygame.key.get_pressed()
-        #pressed_keys = [K_DOWN]
-
-        # Update the player sprite based on user keypresses
-        #player.update(pressed_keys)
-
 
         # Update the display
     pygame.display.update()
