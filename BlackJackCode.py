@@ -1,5 +1,58 @@
 import random
+import pygame
+import os
+from pygame.rect import Rect
+pygame.font.init()
 
+WIDTH, HEIGHT = 900, 500
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("BlackJack")
+FPS = 60
+PLAYER_FONT = pygame.font.SysFont('comicsans', 40)
+CARD_WIDTH, CARD_HEIGHT = 100, 150
+
+Ace_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', 'AceOfSpades.png'))
+Ace_Of_Spades = pygame.transform.scale(Ace_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+King_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', 'KingOfSpades.png'))
+King_Of_Spades = pygame.transform.scale(King_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+Jack_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', 'JackOfSpades.png'))
+Jack_Of_Spades = pygame.transform.scale(Jack_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+Six_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', '6OfSpades.png'))
+Six_Of_Spades = pygame.transform.scale(Six_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+
+
+def draw_window():
+  WIN.fill((250, 250, 250))
+  WIN.blit(Ace_Of_Spades, (350, 350))
+  WIN.blit(King_Of_Spades, (425, 350))
+  WIN.blit(Jack_Of_Spades, (425, 0))
+  WIN.blit(Six_Of_Spades, (350, 0))
+  player_text = PLAYER_FONT.render("Players Hand: ", 1, (255, 0, 0))
+  dealer_text = PLAYER_FONT.render("Dealers Hand: ", 1, (255, 0, 0))
+  WIN.blit(player_text, (10, 400))
+  WIN.blit(dealer_text, (10, 10))
+
+
+  pygame.display.update()
+
+def main():
+  clock = pygame.time.Clock()
+  run = True
+  while run:
+    clock.tick(FPS)
+    for event in pygame.event.get(): #Gets a list of all different events occurring
+        if event.type == pygame.QUIT: #if quit stop running
+            run = False
+            exit() #Ends entire code
+    
+    draw_window()
+
+  pygame.quit()
+
+if __name__ == "__main__":
+    main()   
+
+#Regular code
 def facecards(newlistval):
   if newlistval == 1:
     newlistval = 'A'
@@ -25,9 +78,9 @@ def unfacecards(newlistvalue):
 
 def playervsdealer(player, dealer, i):
   if(player > 21):
-    return('-----------Bust!, Dealer Wins Round ' + str(i) + '! -----------')
+    return('-----------Player Bust!, Dealer Wins Round ' + str(i) + '! -----------')
   elif(dealer > 21):
-    return('-----------Bust!, Player Wins Round ' + str(i) + '! -----------')
+    return('-----------Dealer Bust!, Player Wins Round ' + str(i) + '! -----------')
   if(dealer > player and dealer <= 21):
     return('-----------Dealer Wins Round ' + str(i) + '! -----------')
   elif(player > dealer and player <= 21):
@@ -277,6 +330,8 @@ for i in range(0, 10):
 
   print('Would you like to hit or stand? h/s')
   standhit = input()
+  if standhit == 'quit' or standhit == 'exit':
+    exit()
 
 #--------------------Hit/Stand-----------------------
   if(standhit == 's'): #Player chooses to stand
@@ -301,6 +356,8 @@ for i in range(0, 10):
       while(player <= 21):
         print('Hit again? Y/N: ')
         answer = input()
+        if (answer == 'quit' or answer == 'exit'):
+          exit()
         if(answer == 'N'):
           while(dealer < 17):
             print('dealer hits')
