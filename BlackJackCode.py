@@ -8,6 +8,7 @@ WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("BlackJack")
 FPS = 60
+VEL = 7 #Velocity of how face card is drawn
 PLAYER_FONT = pygame.font.SysFont('comicsans', 40)
 CARD_WIDTH, CARD_HEIGHT = 100, 150
 
@@ -19,23 +20,51 @@ Jack_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', 'JackOf
 Jack_Of_Spades = pygame.transform.scale(Jack_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
 Six_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', '6OfSpades.png'))
 Six_Of_Spades = pygame.transform.scale(Six_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+Five_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', '5OfSpades.png'))
+Five_Of_Spades = pygame.transform.scale(Five_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+Three_Of_Spades_Image = pygame.image.load(os.path.join('BlackJackAssets', '3OfSpades.png'))
+Three_Of_Spades = pygame.transform.scale(Three_Of_Spades_Image, (CARD_WIDTH, CARD_HEIGHT))
+Deck_Image = pygame.image.load(os.path.join('BlackJackAssets', 'Deck.png'))
+Deck = pygame.transform.scale(Deck_Image, (CARD_WIDTH, CARD_HEIGHT))
 
 
-def draw_window():
+def draw_window(dealer_new_card, player_new_card):
   WIN.fill((250, 250, 250))
   WIN.blit(Ace_Of_Spades, (350, 350))
   WIN.blit(King_Of_Spades, (425, 350))
   WIN.blit(Jack_Of_Spades, (425, 0))
   WIN.blit(Six_Of_Spades, (350, 0))
+  WIN.blit(Five_Of_Spades, (dealer_new_card.x, dealer_new_card.y))
+  WIN.blit(Three_Of_Spades, (player_new_card.x, player_new_card.y))
+  WIN.blit(Deck, (200, 200))
   player_text = PLAYER_FONT.render("Players Hand: ", 1, (255, 0, 0))
   dealer_text = PLAYER_FONT.render("Dealers Hand: ", 1, (255, 0, 0))
-  WIN.blit(player_text, (10, 400))
+  WIN.blit(player_text, (10, 370))
   WIN.blit(dealer_text, (10, 10))
-
 
   pygame.display.update()
 
+def dealer_draw_card(card):
+  if card.x != 500:
+    card.x += 5
+  if card.y != 0:
+    card.y -= 5
+  #Keep adding each value as long as it doesnt hit final x/y
+  #I think this keeps looping even when done, could be a problem
+
+def player_draw_card(card):
+  while card.x != 500 or card.y != HEIGHT-150:
+    if card.x != 500:
+      card.x += 5
+    if card.y != HEIGHT-150:
+      card.y += 5
+  print("Done")
+  print(card.x, card.y)
+
 def main():
+  pos = 0, 0
+  newcard = pygame.Rect(200, 200, CARD_WIDTH, CARD_HEIGHT)
+  deck_top_card = pygame.Rect(200, 200, CARD_WIDTH, CARD_HEIGHT)
   clock = pygame.time.Clock()
   run = True
   while run:
@@ -44,8 +73,16 @@ def main():
         if event.type == pygame.QUIT: #if quit stop running
             run = False
             exit() #Ends entire code
-    
-    draw_window()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+          pos = pygame.mouse.get_pos()
+  
+
+    if deck_top_card.collidepoint(pos):
+      player_draw_card(deck_top_card)
+    dealer_draw_card(newcard)
+    #player_draw_card(deck_top_card)
+    draw_window(newcard, deck_top_card)
+    #print(deck_top_card.x, deck_top_card.y)
 
   pygame.quit()
 
